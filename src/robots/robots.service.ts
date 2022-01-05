@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { type } from 'os';
-import { MAX_COORDINATE_VALUE, MAX_INSTRUCTIONS_STRING_LENGTH, VALID_INSTRUCTIONS } from 'src/constants';
-import { FileService } from 'src/utils/files.service';
+import { MAX_COORDINATE_VALUE, MAX_INSTRUCTIONS_STRING_LENGTH, VALID_INSTRUCTIONS } from '../constants';
+import { FileService } from '../utils/files.service';
 import { RobotsMap, Position, RobotInstruction } from './interfaces/robotmap.interface';
 import { RobotsUtils } from './robotsmap.utils';
 
