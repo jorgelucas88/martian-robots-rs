@@ -1,0 +1,1 @@
+Coordinates must be positive and have a maximum of 50 and robots must be placed within the declared map!

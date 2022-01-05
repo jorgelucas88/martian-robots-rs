@@ -1,4 +1,4 @@
-import { MAX_COORDINATE_VALUE, MAX_INSTRUCTIONS_STRING_LENGTH,  } from '../constants';
+import { MAX_COORDINATE_VALUE, MAX_INSTRUCTIONS_STRING_LENGTH, VALID_INSTRUCTIONS,  } from '../constants';
 import { RobotsMap, MapSize, RobotInstruction, Position } from './interfaces/robotmap.interface';
 import { RobotsFile, LINE_BREAK, POSITION_SEPARATOR, MAP_SIZE_POSITION } from './interfaces/robotfile.interface';
 
@@ -47,14 +47,14 @@ export class RobotsUtils {
     public static getSingleRobotInstructions(fileLine: string): string[] {
         return fileLine.split('');
     }
-    public static calculateFinalPosition(initialPosition: Position, instructions: string[], mapSize: MapSize): Position {
+    public static calculateFinalPosition(initialPosition: Position, instructions: string[], mapSize: MapSize, scentedPositions: Position[]): Position {
         let finalPosition: Position = initialPosition;
         instructions.forEach(i => {
-            finalPosition = RobotsUtils.calculateNextPosition(finalPosition, i, mapSize);
+            finalPosition = RobotsUtils.calculateNextPosition(finalPosition, i, mapSize, scentedPositions);
         });
         return finalPosition;
     }
-    public static calculateNextPosition(position: Position, instruction: string, mapSize: MapSize): Position {
+    public static calculateNextPosition(position: Position, instruction: string, mapSize: MapSize, scentedPositions: Position[]): Position {
         switch (instruction) {
             case "R":
             case "L":
@@ -62,8 +62,11 @@ export class RobotsUtils {
                 break;
             case "F":
                 const newPosition: Position = RobotsUtils.moveForward(position);
-                if (newPosition.x > mapSize.axisX || newPosition.y > mapSize.axisY) {
-                    position.isLost = true;
+                if (newPosition.x > mapSize.axisX || newPosition.y > mapSize.axisY || newPosition.x < 0 || newPosition.y < 0) {
+                    const isPositionScented: boolean = scentedPositions.find(f => f.x == position.x && f.y == position.y) != undefined;
+                    position.isLost = !isPositionScented;
+                } else {
+                    position = newPosition;
                 }
                 break;
         }
@@ -89,23 +92,46 @@ export class RobotsUtils {
         return orientation;
     }
     public static moveForward(position: Position): Position {
-        const orientation: string = position.orientation;
-        switch (orientation) {
+        const newPosition: Position = Object.assign({}, position); // cloning original position in order to not change it
+        switch (newPosition.orientation) {
             case "N":
-                position.y++;    
+                newPosition.y++;    
                 break;
             case "S":
-                position.y--;
+                newPosition.y--;
                 break;
             case "E":
-                position.x++;
+                newPosition.x++;
                 break;
             case "W":
-                position.x--;
+                newPosition.x--;
                 break;
             default:
                 break;
         }
-        return position;
+        return newPosition;
     }
+    public static allCordinatesAreValid(robotsMap: RobotsMap): boolean {
+        let validCoordinates = true;
+
+        robotsMap.robotInstructions.forEach(i => {
+            validCoordinates = i.position.x <= robotsMap.mapSize.axisX && i.position.y <= robotsMap.mapSize.axisY;
+        });
+        
+        return robotsMap.mapSize.axisX >= -1 && robotsMap.mapSize.axisX <= MAX_COORDINATE_VALUE && robotsMap.mapSize.axisY >= -1 && robotsMap.mapSize.axisY <= MAX_COORDINATE_VALUE && validCoordinates;
+    }
+
+    public static allInstructionsAreValid(robotsMap: RobotsMap): boolean {
+        let validInstructions = true;
+
+        robotsMap.robotInstructions.forEach(ri => {
+            ri.instructions.forEach(i => {
+                validInstructions = VALID_INSTRUCTIONS.includes(i);
+            });
+            validInstructions = validInstructions && ri.instructions.length <= 50;
+        });
+
+        return validInstructions;
+    }
+    
 }

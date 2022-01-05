@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { RobotsService } from './robots.service';
 
 @Controller("robots")
@@ -6,7 +7,10 @@ export class RobotsController {
   constructor(private readonly robotsService: RobotsService) {}
 
   @Post("processRobotsMap")
-  async processRobotsMap(@Body() body: string, @Req() req): Promise<string> {
-    return await this.robotsService.processRobotsMapFromFile("test/files/test1_input.txt");
+  @UseInterceptors(FileInterceptor('file'))
+  async processRobotsMap(@UploadedFile() file: Express.Multer.File): Promise<string> {
+    const fileContents: string = Buffer.from(file.buffer).toString();
+  
+    return this.robotsService.processRobotsMap(fileContents);
   }
 }

@@ -1,0 +1,1 @@
+Instructions must be R,L,F and maximum length of 100
