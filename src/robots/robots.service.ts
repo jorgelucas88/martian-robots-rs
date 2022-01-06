@@ -79,7 +79,7 @@ export class RobotsService {
       id: null,
       date: new Date(),
       input: JSON.stringify(robotsMap),
-      output: JSON.stringify(robotsMovementsOutput),
+      output: robotsMovementsOutput.map(m => { return `${m.x} ${m.y} ${m.orientation}${m.isLost ? " LOST" : ""}\n`}).join(""),
       exploredSurface: robotsMap.exploredSurface,
       lostRobots: robotsMap.lostRobots
     });
