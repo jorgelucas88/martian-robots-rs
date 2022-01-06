@@ -2,7 +2,7 @@
 Welcome to the Martian Robots Route Calculation repo microservice
 
 ## Description
-This microservice calculates routes of martian robots on the surface of mars.
+This microservice calculates routes of robots on the surface of mars.
 The robots move along a squared map, rotating and moving vertically or horizontally.
 The lower-left coordinates are the 0, 0 position, and the top-right position is the last available square. The squares starts from 0 to max-size (x and y);
 Given an input file, if a robot crosses some of the map bounderies, it gets lost. After that, if a robot tries to cross the same boundary, the previous one leaves a "scent", preventing the next one to loses itself crossing the same point.
@@ -17,6 +17,8 @@ NestJS v8.2.3
 - set to node 14
 - clone repo branch dev
 - npm install
+
+To run
 - Using docker: docker-compose up dev
 - Running locally: npm run start
 
