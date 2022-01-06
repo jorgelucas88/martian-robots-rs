@@ -1,14 +1,20 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { type } from 'os';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { MAX_COORDINATE_VALUE, MAX_INSTRUCTIONS_STRING_LENGTH, VALID_INSTRUCTIONS } from '../constants';
 import { FileService } from '../utils/files.service';
+import { RobotMapRun } from './entities/robotmaprun.entity';
 import { RobotsMap, Position, RobotInstruction } from './interfaces/robotmap.interface';
 import { RobotsUtils } from './robotsmap.utils';
 
 @Injectable()
 export class RobotsService {
 
-  constructor(private fileService: FileService) { }
+  constructor(
+    private fileService: FileService,
+    @InjectRepository(RobotMapRun)
+    private robotMapRunRepository: Repository<RobotMapRun>
+    ) { }
 
   public async processRobotsMapFromFile(filePath: string): Promise<string> {
     const fileContents: string = await this.fileService.readFile(filePath);
@@ -17,15 +23,18 @@ export class RobotsService {
     return this.processRobotsMap(robotsMap);
   }
 
-  public processRobotsMap(robotsMap: RobotsMap | string): string {
+  public async processRobotsMap(robotsMap: RobotsMap | string): Promise<string> {
 
     if (typeof robotsMap === "string") {
       robotsMap = RobotsUtils.getRobotMap(robotsMap);
     }
     
     this.validateRobotsMap(robotsMap);
+    
     const robotsMovementsOutput: Position[] = this.processRobotInstructions(robotsMap);
     
+    await this.insertRobotsMapRunStatistics(robotsMap, robotsMovementsOutput);
+
     return robotsMovementsOutput.map(m => { return `${m.x} ${m.y} ${m.orientation}${m.isLost ? " LOST" : ""}\n`}).join("");
   }
 
@@ -43,12 +52,38 @@ export class RobotsService {
     const scentedPositions: Position[] = [];
     
     robotsMap.robotInstructions.forEach(r => {
-      const robotFinalPosition: Position = RobotsUtils.calculateFinalPosition(r.position, r.instructions, (<RobotsMap> robotsMap).mapSize, scentedPositions);
-      robotsMovementsOutput.push(robotFinalPosition);
-      robotFinalPosition.isLost ? scentedPositions.push(robotFinalPosition) : "";
+      const finalPosition: Position = RobotsUtils.calculateFinalPosition(r.position, r.instructions, (<RobotsMap> robotsMap).mapSize, scentedPositions);
+      robotsMovementsOutput.push(finalPosition);
+      finalPosition.isLost ? scentedPositions.push(finalPosition) : "";
+      robotsMap.exploredSurface = robotsMap.exploredSurface + finalPosition.exploredSurface
     });
+
+    robotsMap.lostRobots = scentedPositions.length;
 
     return robotsMovementsOutput;
   }
+
+  public async createRobotMapRun(r: RobotMapRun): Promise<RobotMapRun> {
+    return await this.robotMapRunRepository.save(r);
+  }
+
+  public async getAllRobotMapRun(page: number, pageSize: number): Promise<[RobotMapRun[], number]> {
+    return await this.robotMapRunRepository.findAndCount({
+      skip: page && page > 0 && pageSize ? page - 1 * pageSize : 0,
+      take: pageSize
+    });
+  }
+
+  public async insertRobotsMapRunStatistics(robotsMap: RobotsMap, robotsMovementsOutput: Position[]) {
+    return await this.createRobotMapRun({
+      id: null,
+      date: new Date(),
+      input: JSON.stringify(robotsMap),
+      output: JSON.stringify(robotsMovementsOutput),
+      exploredSurface: robotsMap.exploredSurface,
+      lostRobots: robotsMap.lostRobots
+    });
+  }
+  
 
 }

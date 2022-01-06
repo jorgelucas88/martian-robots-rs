@@ -21,15 +21,18 @@ describe('RobotsUtils', () => {
         mapSize: mapSize,
         robotInstructions: [
           { 
-            position: { x: 0, y: 0, orientation: "N", isLost: false },
+            position: { exploredSurface: 0, x: 0, y: 0, orientation: "N", isLost: false },
             instructions: ["L"]
           } 
-        ]
+        ],
+        lostRobots: 0,
+        exploredSurface: 0
       };
       const robotsFile: RobotsFile = { lines: ["2 2\n", "0 0 N\n", "L"]};
       const robotsFileString: string = "2 2\n0 0 N\nL";
       const robotInstruction: RobotInstruction = {
           position: {
+            exploredSurface: 0,
             x: 1,
             y: 2,
             orientation: "N",
@@ -83,7 +86,7 @@ describe('RobotsUtils', () => {
 
       try {
         const utilsResult: RobotInstruction[] = RobotsUtils.getRobotInstructions(robotsFile);
-        expect(utilsResult).toStrictEqual([{ position: { x: 0, y: 0, orientation: "N", isLost: false}, instructions: splittedRobotInstructions}]);
+        expect(utilsResult).toStrictEqual([{ position: { exploredSurface: 0, x: 0, y: 0, orientation: "N", isLost: false}, instructions: splittedRobotInstructions}]);
       } catch(e) {
         expect(e).toBeUndefined();
       }
@@ -105,7 +108,8 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 2,
         orientation: "N",
-        isLost: false
+        isLost: false,
+        exploredSurface: 0
       };
       const instructions: string[] = ["L", "R"];
       const mapSize: MapSize = { axisX: 2, axisY: 2 };
@@ -223,13 +227,15 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       const result: Position = { 
         x: 1,
         y: 2,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.moveForward(from);
@@ -245,13 +251,15 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       const result: Position = { 
         x: 1,
         y: 0,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.moveForward(from);
@@ -267,13 +275,15 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       const result: Position = { 
         x: 0,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.moveForward(from);
@@ -289,13 +299,15 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       const result: Position = { 
         x: 2,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.moveForward(from);
@@ -311,13 +323,15 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       const result: Position = { 
         x: 1,
         y: 1,
         orientation: orientation,
-        isLost: false 
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.moveForward(from);
@@ -333,10 +347,12 @@ describe('RobotsUtils', () => {
         mapSize: mapSize,
         robotInstructions: [
           { 
-            position: { x: 0, y: 0, orientation: "N", isLost: false },
+            position: { exploredSurface: 0, x: 0, y: 0, orientation: "N", isLost: false },
             instructions: ["L"]
           } 
-        ]
+        ],
+        exploredSurface: 0,
+        lostRobots: 0
       };
 
       try {
@@ -353,10 +369,12 @@ describe('RobotsUtils', () => {
         mapSize: mapSize,
         robotInstructions: [
           { 
-            position: { x: 4, y: 3, orientation: "N", isLost: false },
+            position: { x: 4, y: 3, orientation: "N", isLost: false, exploredSurface: 0 },
             instructions: ["L"]
           } 
-        ]
+        ],
+        exploredSurface: 0,
+        lostRobots: 0
       };
 
       try {
@@ -373,10 +391,12 @@ describe('RobotsUtils', () => {
         mapSize: mapSize,
         robotInstructions: [
           { 
-            position: { x: 0, y: 0, orientation: "N", isLost: false },
+            position: { exploredSurface: 0, x: 0, y: 0, orientation: "N", isLost: false },
             instructions: ["L"]
           } 
-        ]
+        ],
+        exploredSurface: 0,
+        lostRobots: 0
       };
 
       try {
@@ -393,10 +413,12 @@ describe('RobotsUtils', () => {
         mapSize: mapSize,
         robotInstructions: [
           { 
-            position: { x: 0, y: 0, orientation: "N", isLost: false },
+            position: { exploredSurface: 0, x: 0, y: 0, orientation: "N", isLost: false },
             instructions: ["LA"]
           } 
-        ]
+        ],
+        exploredSurface: 0,
+        lostRobots: 0
       };
 
       try {
@@ -413,10 +435,12 @@ describe('RobotsUtils', () => {
         mapSize: mapSize,
         robotInstructions: [
           { 
-            position: { x: 0, y: 0, orientation: "N", isLost: false },
+            position: { exploredSurface: 0, x: 0, y: 0, orientation: "N", isLost: false },
             instructions: ["LA"]
           } 
-        ]
+        ],
+        exploredSurface: 0,
+        lostRobots: 0
       };
 
       try {
@@ -432,7 +456,8 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 2,
         orientation: "N",
-        isLost: false
+        isLost: false,
+        exploredSurface: 0
       };
       const instruction: string = "F";
       const scentedPositions: Position[] = [position];
@@ -442,7 +467,8 @@ describe('RobotsUtils', () => {
         x: 1,
         y: 2,
         orientation: "N",
-        isLost: false
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.calculateNextPosition(position, instruction, mapSize, scentedPositions);
@@ -457,7 +483,8 @@ describe('RobotsUtils', () => {
         x: 0,
         y: 0,
         orientation: "S",
-        isLost: false
+        isLost: false,
+        exploredSurface: 0
       };
       const instruction: string = "F";
       const scentedPositions: Position[] = [];
@@ -467,7 +494,8 @@ describe('RobotsUtils', () => {
         x: 0,
         y: 0,
         orientation: "S",
-        isLost: true
+        isLost: true,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.calculateNextPosition(position, instruction, mapSize, scentedPositions);
@@ -482,7 +510,8 @@ describe('RobotsUtils', () => {
         x: 0,
         y: 0,
         orientation: "N",
-        isLost: false
+        isLost: false,
+        exploredSurface: 0
       };
       const instruction: string = "F";
       const scentedPositions: Position[] = [];
@@ -492,7 +521,8 @@ describe('RobotsUtils', () => {
         x: 0,
         y: 1,
         orientation: "N",
-        isLost: false
+        isLost: false,
+        exploredSurface: 0
       };
       try {
         const utilsResult: Position = RobotsUtils.calculateNextPosition(position, instruction, mapSize, scentedPositions);

@@ -1,6 +1,8 @@
 export interface RobotsMap {
     mapSize: MapSize;
     robotInstructions: RobotInstruction[];
+    lostRobots: number;
+    exploredSurface: number;
 }
 
 export interface MapSize {
@@ -18,4 +20,5 @@ export interface Position {
     y: number;
     orientation: string;
     isLost: boolean;
+    exploredSurface: number;
 }

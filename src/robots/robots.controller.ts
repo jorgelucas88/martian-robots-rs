@@ -12,9 +12,17 @@ export class RobotsController {
     if (file) {
       const fileContents: string = Buffer.from(file.buffer).toString();
     
-      return this.robotsService.processRobotsMap(fileContents);
+      return await this.robotsService.processRobotsMap(fileContents);
+
     } else {
       throw new BadRequestException("No file");
     }
+  }
+
+  @Get("getAllRobotMapRun")
+  async getAllRobotMapRun(@Req() req) {
+    const page: number = req.query.page;
+    const pageSize: number = req.query.pageSize;
+    return await this.robotsService.getAllRobotMapRun(page, pageSize);
   }
 }

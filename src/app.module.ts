@@ -1,11 +1,16 @@
 import { Module } from '@nestjs/common';
-import { RobotsController } from './robots/robots.controller';
 import { RobotsModule } from './robots/robots.module';
-import { RobotsService } from './robots/robots.service';
-import { FileService } from './utils/files.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
-  imports: [RobotsModule],
+  imports: [RobotsModule,
+    TypeOrmModule.forRoot({
+      type: 'sqlite',
+      database: 'db.sqlite',
+      entities: [__dirname + '/**/*.entity{.ts,.js}'],
+      synchronize: true,
+   }),
+  ],
   controllers: [],
   providers: [],
 })

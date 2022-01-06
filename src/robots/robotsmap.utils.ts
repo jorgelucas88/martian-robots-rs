@@ -7,7 +7,7 @@ export class RobotsUtils {
         const robotsFile: RobotsFile = RobotsUtils.getRobotMapLines(fileContents);
         const mapSize: MapSize = RobotsUtils.getMapSize(robotsFile);
         const robotInstructions: RobotInstruction[] = RobotsUtils.getRobotInstructions(robotsFile);       
-        return { mapSize: mapSize, robotInstructions: robotInstructions };
+        return { mapSize: mapSize, robotInstructions: robotInstructions, exploredSurface: 0, lostRobots: 0 };
     }
     public static getRobotMapLines(fileContents: string): RobotsFile {
         const lines: string[] = fileContents.split(LINE_BREAK);
@@ -42,15 +42,20 @@ export class RobotsUtils {
     }
     public static getPosition(fileLine: string): Position {
         const positionRaw: string[] = fileLine.split(POSITION_SEPARATOR);
-        return { x: parseInt(positionRaw[0]), y: parseInt(positionRaw[1]), orientation: positionRaw[2], isLost: false };
+        return { x: parseInt(positionRaw[0]), y: parseInt(positionRaw[1]), orientation: positionRaw[2], isLost: false, exploredSurface: 0 };
     }
     public static getSingleRobotInstructions(fileLine: string): string[] {
         return fileLine.split('');
     }
     public static calculateFinalPosition(initialPosition: Position, instructions: string[], mapSize: MapSize, scentedPositions: Position[]): Position {
         let finalPosition: Position = initialPosition;
+        let auxExploredSurfacePosition: Position = initialPosition;
         instructions.forEach(i => {
             finalPosition = RobotsUtils.calculateNextPosition(finalPosition, i, mapSize, scentedPositions);
+            if (finalPosition.x != auxExploredSurfacePosition.x || finalPosition.y != auxExploredSurfacePosition.y) {
+                finalPosition.exploredSurface = finalPosition.exploredSurface ? finalPosition.exploredSurface++ : 1;
+            }
+            auxExploredSurfacePosition = finalPosition;
         });
         return finalPosition;
     }
