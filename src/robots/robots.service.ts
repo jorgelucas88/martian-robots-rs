@@ -23,7 +23,7 @@ export class RobotsService {
     return this.processRobotsMap(robotsMap);
   }
 
-  public async processRobotsMap(robotsMap: RobotsMap | string): Promise<string> {
+  public async processRobotsMap(robotsMap: RobotsMap | string, rawFileContents?: string): Promise<string> {
 
     if (typeof robotsMap === "string") {
       robotsMap = RobotsUtils.getRobotMap(robotsMap);
@@ -33,9 +33,11 @@ export class RobotsService {
     
     const robotsMovementsOutput: Position[] = this.processRobotInstructions(robotsMap);
     
-    await this.insertRobotsMapRunStatistics(robotsMap, robotsMovementsOutput);
+    const result: string = robotsMovementsOutput.map(m => { return `${m.x} ${m.y} ${m.orientation}${m.isLost ? " LOST" : ""}\n`}).join("");
 
-    return robotsMovementsOutput.map(m => { return `${m.x} ${m.y} ${m.orientation}${m.isLost ? " LOST" : ""}\n`}).join("");
+    await this.insertRobotsMapRunStatistics(rawFileContents, result, robotsMap.exploredSurface, robotsMap.lostRobots);
+
+    return result;
   }
 
   public validateRobotsMap(robotsMap: RobotsMap): void {
@@ -74,14 +76,14 @@ export class RobotsService {
     });
   }
 
-  public async insertRobotsMapRunStatistics(robotsMap: RobotsMap, robotsMovementsOutput: Position[]) {
+  public async insertRobotsMapRunStatistics(rawInput: string, output: string, exploredSurface: number, lostRobots: number) {
     return await this.createRobotMapRun({
       id: null,
       date: new Date(),
-      input: JSON.stringify(robotsMap),
-      output: robotsMovementsOutput.map(m => { return `${m.x} ${m.y} ${m.orientation}${m.isLost ? " LOST" : ""}\n`}).join(""),
-      exploredSurface: robotsMap.exploredSurface,
-      lostRobots: robotsMap.lostRobots
+      input: rawInput,
+      output: output,
+      exploredSurface: exploredSurface,
+      lostRobots: lostRobots
     });
   }
   

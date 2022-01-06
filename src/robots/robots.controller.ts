@@ -12,7 +12,7 @@ export class RobotsController {
     if (file) {
       const fileContents: string = Buffer.from(file.buffer).toString();
     
-      return await this.robotsService.processRobotsMap(fileContents);
+      return await this.robotsService.processRobotsMap(fileContents, fileContents);
 
     } else {
       throw new BadRequestException("No file");
