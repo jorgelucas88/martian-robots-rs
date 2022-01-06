@@ -30,6 +30,10 @@ This microservice can be run in two ways:
 2. Command line:
 - npm run robots-cli-file test/files/test1_input.txt
 
+## Heroku deployment
+- POST /processRobotsMap: https://martian-robots-rs.herokuapp.com/robots/processRobotsMap
+- GET /getAllRobotMapRun: https://martian-robots-rs.herokuapp.com/robots/getAllRobotMapRun?page=1&pageSize=3
+
 ## Postman collection
 https://drive.google.com/drive/folders/1bRyZ_HwDfwG3DO67l_6c46Ryp_KxHaWB
 
