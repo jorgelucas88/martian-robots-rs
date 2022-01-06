@@ -23,8 +23,9 @@ This microservice can be run in two ways:
 
 ## File samples
 File samples can be found here: https://github.com/jorgelucas88/martian-robots-rs/tree/dev/test/files
+Postman collection: https://drive.google.com/drive/folders/1j8sHMGLRWF6JzLBWGmuvk_WTCzO3PAPY?usp=sharing
 
-Example of file:
+Example of file:\
 5 3\
 1 1 E\
 RFRFRFRF\
@@ -33,7 +34,7 @@ FRRFLLFFRRFLL\
 0 3 W\
 LLFFFRFLFL\
 
-Example of output:
+Example of output:\
 1 1 E\
 3 3 N LOST\
 4 2 N\
