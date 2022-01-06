@@ -38,7 +38,7 @@ https://drive.google.com/drive/folders/1j8sHMGLRWF6JzLBWGmuvk_WTCzO3PAPY?usp=sha
 File samples can be found here: https://github.com/jorgelucas88/martian-robots-rs/tree/dev/test/files
 
 
-Example of file:\
+Example of input:\
 5 3\
 1 1 E\
 RFRFRFRF\
