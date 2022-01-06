@@ -13,6 +13,13 @@ Node v14
 ## NestJS
 NestJS v8.2.3
 
+## Instalacion
+- set to node 14
+- clone repo branch dev
+- npm install
+- Using docker: docker-compose up dev
+- Running locally: npm run start
+
 ## Usage
 This microservice can be run in two ways:
 1. APIs: 
