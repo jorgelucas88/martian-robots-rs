@@ -7,7 +7,7 @@ import { MapSize, Position, RobotInstruction, RobotsMap } from '../interfaces/ro
 import { RobotsService } from '../robots.service';
 import { RobotsUtils } from '../robotsmap.utils';
 
-describe('RobotsService Unit tests', () => {
+describe('RobotsService integration tests', () => {
   let robotsService: RobotsService;
   let fileService: FileService;
 
@@ -36,9 +36,9 @@ describe('RobotsService Unit tests', () => {
   describe('processRobotsMapFromFile', () => {
     it('processRobotsMapFromFile success', async () => {
       const filePath: string = "dummyFilePath";
+      const fileContents: string = "5 3\n1 1 E\nRFRFRFRF\n3 2 N\nFRRFLLFFRRFLL\n0 3 W\nLLFFFRFLFL";
       
-      jest.spyOn(fileService, "readFile").mockImplementationOnce((filePath: string): Promise<string> => { return; });
-      jest.spyOn(RobotsUtils, "getRobotMap").mockImplementationOnce((fileContents: string): RobotsMap => { return; });
+      jest.spyOn(fileService, "readFile").mockImplementationOnce((filePath: string): Promise<string> => { return new Promise<string>((resolve, reject) => resolve(fileContents)); });
       jest.spyOn(robotsService, "processRobotsMap").mockImplementationOnce((fileContents: string | RobotsMap): Promise<string> => { return; });
 
       try {
@@ -65,21 +65,15 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
 
-      jest.spyOn(robotsService, "validateRobotsMap").mockImplementationOnce((robotsMap: RobotsMap): void => { return; });
-      jest.spyOn(robotsService, "processRobotInstructions").mockImplementationOnce((robotsMap: RobotsMap): Position[] => { return [{ x: 1, y: 1, orientation: "N", isLost: true,
-      exploredSurface: 0 }]; });
-
       try {
-        robotsService.processRobotsMap(apiInput);
-        expect(robotsService.validateRobotsMap).toBeCalled();
-        expect(robotsService.processRobotInstructions).toBeCalled();
+        const apiResult: string = await robotsService.processRobotsMap(apiInput);
+        expect(apiResult).toBe("0 0 W\n");
       } catch(e) {
         expect(e).toBeUndefined();
       }
     });
 
     it('processRobotsMapFrom success - string as input', async () => {
-      const apiInputString: string = "2 2\n0 0 N\nL";
       const robotsMap: RobotsMap = {
         mapSize: { axisX: 2, axisY: 2 },
         robotInstructions: [
@@ -93,14 +87,9 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
   
-      jest.spyOn(RobotsUtils, "getRobotMap").mockImplementationOnce((fileContents: string): RobotsMap => { return robotsMap; });
-      jest.spyOn(robotsService, "validateRobotsMap").mockImplementationOnce((robotsMap: RobotsMap): void => { return; });
-      jest.spyOn(robotsService, "processRobotInstructions").mockImplementationOnce((robotsMap: RobotsMap): Position[] => { return []; });
-  
       try {
-        robotsService.processRobotsMap(apiInputString);
-        expect(robotsService.validateRobotsMap).toBeCalled();
-        expect(robotsService.processRobotInstructions).toBeCalled();
+        const apiResult: string = await robotsService.processRobotsMap(robotsMap);
+        expect(apiResult).toBe("0 0 W\n");
       } catch(e) {
         expect(e).toBeUndefined();
       }
@@ -123,14 +112,9 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
 
-      jest.spyOn(RobotsUtils, "allCordinatesAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return true; });
-      jest.spyOn(RobotsUtils, "allInstructionsAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return true; });
-
-
       try {
-        robotsService.validateRobotsMap(robotsMap);
-        expect(RobotsUtils.allCordinatesAreValid).toBeCalled();
-        expect(RobotsUtils.allInstructionsAreValid).toBeCalled();
+        const apiResult: string = await robotsService.processRobotsMap(robotsMap);
+        expect(apiResult).toBe("0 0 W\n");
       } catch(e) {
         expect(e).toBeUndefined();
       }
@@ -151,14 +135,8 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
 
-      jest.spyOn(RobotsUtils, "allCordinatesAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return false; });
-      jest.spyOn(RobotsUtils, "allInstructionsAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return false; });
-
-
       try {
         robotsService.validateRobotsMap(robotsMap);
-        expect(RobotsUtils.allCordinatesAreValid).toBeCalled();
-        expect(RobotsUtils.allInstructionsAreValid).toBeCalled();
       } catch(e) {
         expect(e).toBeDefined();
         expect(e).toBeInstanceOf(BadRequestException);
@@ -180,14 +158,8 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
 
-      jest.spyOn(RobotsUtils, "allCordinatesAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return true; });
-      jest.spyOn(RobotsUtils, "allInstructionsAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return false; });
-
-
       try {
         robotsService.validateRobotsMap(robotsMap);
-        expect(RobotsUtils.allCordinatesAreValid).toBeCalled();
-        expect(RobotsUtils.allInstructionsAreValid).toBeCalled();
       } catch(e) {
         expect(e).toBeDefined();
         expect(e).toBeInstanceOf(BadRequestException);
@@ -209,14 +181,8 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
 
-      jest.spyOn(RobotsUtils, "allCordinatesAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return false; });
-      jest.spyOn(RobotsUtils, "allInstructionsAreValid").mockImplementationOnce((robotsMap: RobotsMap): boolean => { return true; });
-
-
       try {
         robotsService.validateRobotsMap(robotsMap);
-        expect(RobotsUtils.allCordinatesAreValid).toBeCalled();
-        expect(RobotsUtils.allInstructionsAreValid).toBeCalled();
       } catch(e) {
         expect(e).toBeDefined();
         expect(e).toBeInstanceOf(BadRequestException);
@@ -240,13 +206,8 @@ describe('RobotsService Unit tests', () => {
         lostRobots: 0
       };
 
-      jest.spyOn(RobotsUtils, "calculateFinalPosition").mockImplementationOnce((initialPosition: Position, instructions: string[], mapSize: MapSize, scentedPositions: Position[]): Position => { return { x: 1, y: 1, orientation: "N", isLost: true,
-      exploredSurface: 0 }; });
-
-
       try {
         robotsService.processRobotInstructions(robotsMap);
-        expect(RobotsUtils.calculateFinalPosition).toBeCalled();
       } catch(e) {
         expect(e).toBeUndefined();
       }

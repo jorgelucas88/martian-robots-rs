@@ -1,5 +1,5 @@
 # MRRC 1.0
-Welcome to the Martian Robots Route Calculation 1.0
+Welcome to the Martian Robots Route Calculation repo microservice
 
 ## Description
 This microservice calculates routes of martian robots on the surface of mars.
@@ -10,29 +10,33 @@ Given an input file, if a robot crosses some of the map bounderies, it gets lost
 ## Node version
 Node v14
 
+## NestJS
+NestJS v8.2.3
+
 ## Usage
 This microservice can be run in two ways:
 1. APIs: 
-- POST /processRobotsMap uploading the robots map file
+- POST /processRobotsMap - Upload the robots map file and get the calculation results
+- GET /getAllRobotMapRun - retrieve the calculations paginated (ex: /getAllRobotMapRun?page=3&pageSize=15 - default is 0 and 15)
 2. Command line:
 - npm run robots-cli-file test/files/test1_input.txt
 
 ## File samples
-File samples can be found here: <link>
+File samples can be found here: https://github.com/jorgelucas88/martian-robots-rs/tree/dev/test/files
 
 Example of file:
-5 3
-1 1 E
-RFRFRFRF
-3 2 N
-FRRFLLFFRRFLL
-0 3 W
-LLFFFRFLFL
+5 3\
+1 1 E\
+RFRFRFRF\
+3 2 N\
+FRRFLLFFRRFLL\
+0 3 W\
+LLFFFRFLFL\
 
 Example of output:
-1 1 E
-3 3 N LOST
-4 2 N
+1 1 E\
+3 3 N LOST\
+4 2 N\
 
 
 ## Running the microservice:

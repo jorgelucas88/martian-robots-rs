@@ -51,11 +51,13 @@ export class RobotsUtils {
         let finalPosition: Position = initialPosition;
         let auxExploredSurfacePosition: Position = initialPosition;
         instructions.forEach(i => {
-            finalPosition = RobotsUtils.calculateNextPosition(finalPosition, i, mapSize, scentedPositions);
-            if (finalPosition.x != auxExploredSurfacePosition.x || finalPosition.y != auxExploredSurfacePosition.y) {
-                finalPosition.exploredSurface = finalPosition.exploredSurface ? finalPosition.exploredSurface++ : 1;
+            if (!finalPosition.isLost) {
+                finalPosition = RobotsUtils.calculateNextPosition(finalPosition, i, mapSize, scentedPositions);
+                if (finalPosition.x != auxExploredSurfacePosition.x || finalPosition.y != auxExploredSurfacePosition.y) {
+                    finalPosition.exploredSurface = finalPosition.exploredSurface ? finalPosition.exploredSurface++ : 1;
+                }
+                auxExploredSurfacePosition = finalPosition;
             }
-            auxExploredSurfacePosition = finalPosition;
         });
         return finalPosition;
     }
