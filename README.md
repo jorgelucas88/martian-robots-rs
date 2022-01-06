@@ -21,11 +21,13 @@ This microservice can be run in two ways:
 2. Command line:
 - npm run robots-cli-file test/files/test1_input.txt
 
+## Postman collection
+https://drive.google.com/drive/folders/1j8sHMGLRWF6JzLBWGmuvk_WTCzO3PAPY?usp=sharing
+
+
 ## File samples
 File samples can be found here: https://github.com/jorgelucas88/martian-robots-rs/tree/dev/test/files
 
-
-Postman collection: https://drive.google.com/drive/folders/1j8sHMGLRWF6JzLBWGmuvk_WTCzO3PAPY?usp=sharing
 
 Example of file:\
 5 3\
