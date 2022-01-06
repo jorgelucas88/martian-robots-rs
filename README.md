@@ -31,7 +31,10 @@ This microservice can be run in two ways:
 - npm run robots-cli-file test/files/test1_input.txt
 
 ## Postman collection
-https://drive.google.com/drive/folders/1j8sHMGLRWF6JzLBWGmuvk_WTCzO3PAPY?usp=sharing
+https://drive.google.com/drive/folders/1bRyZ_HwDfwG3DO67l_6c46Ryp_KxHaWB
+
+## Coverage
+Coverage status given by Istambul (JS Test coverage tool): https://drive.google.com/drive/folders/1sQtSSsBNy0PkuMVisJzt8mB0mcHG7H4D
 
 
 ## File samples
