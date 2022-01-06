@@ -45,12 +45,12 @@ RFRFRFRF\
 3 2 N\
 FRRFLLFFRRFLL\
 0 3 W\
-LLFFFRFLFL\
+LLFFFRFLFL
 
 Example of output:\
 1 1 E\
 3 3 N LOST\
-4 2 N\
+4 2 N
 
 
 ## Running the microservice:
