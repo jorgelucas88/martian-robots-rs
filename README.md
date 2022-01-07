@@ -13,7 +13,7 @@ Node v14
 ## NestJS
 NestJS v8.2.3
 
-## Instalacion
+## Installation
 - set to node 14
 - clone repo branch dev
 - npm install
