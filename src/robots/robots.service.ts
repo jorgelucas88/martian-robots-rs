@@ -71,7 +71,7 @@ export class RobotsService {
 
   public async getAllRobotMapRun(page: number, pageSize: number): Promise<[RobotMapRun[], number]> {
     return await this.robotMapRunRepository.findAndCount({
-      skip: page && page > 0 && pageSize ? page - 1 * pageSize : 0,
+      skip: page && page > 0 && pageSize ? (page - 1) * pageSize : 0,
       take: pageSize
     });
   }
